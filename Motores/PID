@@ -1,0 +1,26 @@
+Introduccion al control de sistemas
+http://www.facstaff.bucknell.edu/mastascu/econtrolhtml/CourseIndex.html
+
+Explicacion de como funciona PID
+http://www.societyofrobots.com/programming_PID.shtml
+
+Libreria PID de Arduino
+http://playground.arduino.cc/Code/PIDLibrary
+
+Pagina que ayuda a mejorar un PID basico
+http://brettbeauregard.com/blog/2011/04/improving-the-beginners-pid-introduction/
+
+Ejemplo de robot que usa PD para seguir linea
+http://www.instructables.com/id/Basic-PD-Proportional-Derivative-Line-Follower/?ALLSTEPS
+
+Ejemplo de robot que usa PID para seguir linea
+http://www.instructables.com/id/LINUSBot-Line-Follower-Robot-with-PID-control/
+
+Ejemplo de robot que usa un motor parecido al nuestro 
+https://github.com/jmckib/two-wheel-arduino-robot
+
+Pasos para crear un robot basico que evite obstaculos
+http://blog.miguelgrinberg.com/category/Arduino
+
+No se de donde lo saque pero si lo guarde es por que nos puede servir
+https://app.box.com/s/c26rsnfenj1ifd2gtyvg
