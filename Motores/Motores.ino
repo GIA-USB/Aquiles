@@ -35,6 +35,8 @@ unsigned int sensorValues[NUM_SENSORS];
 
 boolean seFueIzq = false;
 boolean seFueDer = false; 
+int veloIzq;
+int veloDer;
 
 void setup() {
   // Motores
@@ -152,30 +154,96 @@ void loop()
   }
   //Serial.println(); // uncomment this line if you are using raw values
   Serial.println(position); // comment this line out if you are using raw values
-  position = position - 2500;
   
   //delay(250);
   
   motorspeed(255, 255);
   
-  seFueIzq = position > 450;
-  seFueDer = position < -450;
+  seFueIzq = position > 2750;
+  seFueDer = position < 2250;
   
   if (!seFueIzq && !seFueDer) {
+    // Asignamos las velocidades correspondientes a los motores, como estamos
+    // en el caso donde vamos bien los ponemos a toda marcha.
+    veloIzq = 255;
+    veloDer = 255;
+    motorspeed(veloIzq, veloDer);
+    
+    Serial.print("Velocidad izquierda = ");
+    Serial.print(veloIzq);
+    Serial.print("Velocidad derecha = ");
+    Serial.print(veloDer);
+    
+    // Movemos los motores hacia adelante.
     motorforward(1);
     motorforward(2);
   }
   
   else if (seFueDer) {
-    motorstop(1);
-    motorforward(2); 
+    while (position < 0) {
+      veloDer = 255;
+      veloIzq = 255;
+      //veloIzq = 0 - (position * 15)/ 250;
+      
+      motorspeed(veloIzq, veloDer);
+      
+      Serial.print("Velocidad izquierda = ");
+      Serial.print(veloIzq);
+      Serial.print("Velocidad derecha = ");
+      Serial.print(veloDer);
+      
+//      if (veloIzq > 40) {
+//        veloIzq = veloIzq - 40;
+//        motorspeed(veloIzq, veloDer);
+//        motorback(1);
+//      }
+//      else if (veloIzq < 40) {
+//        motorforward(1);
+//      }
+      
+      motorstop(1);
+      motorforward(2);
+      
+      position = qtrrc.readLine(sensorValues);
+    }
   }
   
   else if (seFueIzq){
-    motorstop(2);
-    motorforward(1);
+    while (position < 0) {
+      veloIzq = 255;
+      veloDer = 255;
+      //veloDer = 0 + (position * 15)/ 250;
+      motorspeed(veloIzq, veloDer);
+      
+      Serial.print("Velocidad izquierda = ");
+      Serial.print(veloIzq);
+      Serial.print("Velocidad derecha = ");
+      Serial.print(veloDer);
+
+//      if (veloDer > 40) {
+//        veloDer = veloDer - 40;
+//        motorspeed(veloIzq, veloDer);
+//        motorback(2);
+//      }
+//      else if (veloIzq < 40) {
+//        motorforward(2);
+//      }
+      
+      motorstop(2);
+      motorforward(1);
+      
+      position = qtrrc.readLine(sensorValues);
+    }
   }
   
-  delay(10);
+  Serial.println();
+  
+//  veloIzq = 255;
+//  veloDer = 255;
+//  
+//  motorforward(1);
+//  motorforward(2);
+  
+  delay(50);
   
 }
