@@ -1,6 +1,6 @@
 #include <QTRSensors.h>
 
-// Definiciones para los motores ////////////////////
+// Definiciones para los motores ///
 
 // map motor poles to Arduino pins
 #define motor1pole1 9 
@@ -20,7 +20,7 @@
 
 ///////////////////////////////////////////////////
 
-// Definiciones para el sensor de Luz //////////////////////////////////////////////////////////
+// Definiciones para el sensor de Luz //////////////////////////////////////////
 
 #define NUM_SENSORS             6  // number of sensors used
 #define TIMEOUT       2500  // waits for 2500 us for sensor outputs to go low
@@ -31,7 +31,7 @@ QTRSensorsRC qtrrc((unsigned char[]) {2, 3, 4, 5, 6, 7},
   NUM_SENSORS, TIMEOUT, EMITTER_PIN); 
 unsigned int sensorValues[NUM_SENSORS];
 
-///////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 boolean seFueIzq = false;
 boolean seFueDer = false; 
@@ -247,3 +247,4 @@ void loop()
   delay(50);
   
 }
+    

@@ -182,3 +182,53 @@ void loop()
   }
   
 }
+
+void seguir_linea(int posicion_linea)
+{
+    switch(posicion_linea)
+    {
+    case 0:
+	motorstop(1);
+	motorforward(2);
+	break;
+	
+    case 7000:
+	motorstop(2);
+	motorforward(1);
+	break;
+	
+    default:
+	error = (float)line_position - 3500;
+
+        // set the motor speed based on proportional and derivative PID terms
+	// kp is the a floating-point proportional constant 
+	//(maybe start with a value around 0.5)
+	// kd is the floating-point derivative constant 
+	//(maybe start with a value around 1)
+	//note that when doing PID, it's very important you get your signs right,
+	//or else the
+	// control loop will be unstable
+	
+	kp = .5;
+	kd = 1;
+	
+	PV = kp * error + kd * (error - lastError);
+	lastError = error;
+	
+
+	if(PV > 55)
+	{
+	    PV = 55;
+	}
+	if(PV < 55)
+	{
+	    PV = -55;
+	}
+	
+	m1Speed = 170 + PV;
+	m2Speed = 170 - PV;
+
+	
+	
+    }
+}
