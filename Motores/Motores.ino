@@ -18,18 +18,7 @@
 #define motordelay 30
 #define debugmotorsec 3000
 
-///////////////////////////////////////////////////
 
-// Definiciones para el sensor de Luz //////////////////////////////////////////
-
-#define NUM_SENSORS             6  // number of sensors used
-#define TIMEOUT       2500  // waits for 2500 us for sensor outputs to go low
-#define EMITTER_PIN             1  // emitter is controlled by digital pin 2
-
-// sensors 0 through 7 are connected to digital pins 3 through 10, respectively
-QTRSensorsRC qtrrc((unsigned char[]) {2, 3, 4, 5, 6, 7},
-  NUM_SENSORS, TIMEOUT, EMITTER_PIN); 
-unsigned int sensorValues[NUM_SENSORS];
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -52,36 +41,6 @@ void setup() {
   pinMode( motor2pole1, OUTPUT);
   pinMode( motor2pole2, OUTPUT);
   motorspeed(0, 0);
-  
-  // Sensor de luz
-  
-    delay(500);
-  pinMode(13, OUTPUT);
-  digitalWrite(13, HIGH);    // turn on Arduino's LED to indicate we are in calibration mode
-  for (int i = 0; i < 400; i++)  // make the calibration take about 10 seconds
-  {
-    qtrrc.calibrate();       // reads all sensors 10 times at 2500 us per read (i.e. ~25 ms per call)
-  }
-  digitalWrite(13, LOW);     // turn off Arduino's LED to indicate we are through with calibration
-
-  // print the calibration minimum values measured when emitters were on
-  Serial.begin(9600);
-  for (int i = 0; i < NUM_SENSORS; i++)
-  {
-    Serial.print(qtrrc.calibratedMinimumOn[i]);
-    Serial.print(' ');
-  }
-  Serial.println();
-  
-  // print the calibration maximum values measured when emitters were on
-  for (int i = 0; i < NUM_SENSORS; i++)
-  {
-    Serial.print(qtrrc.calibratedMaximumOn[i]);
-    Serial.print(' ');
-  }
-  Serial.println();
-  Serial.println();
-  delay(1000);
   
 }
 
@@ -140,109 +99,12 @@ void motorspeed(int motor1speed, int motor2speed) {
 
 void loop()
 {
-  // read calibrated sensor values and obtain a measure of the line position from 0 to 5000
-  // To get raw sensor values, call:
-  //  qtra.read(sensorValues); instead of unsigned int position = qtra.readLine(sensorValues);
-  unsigned int position = qtrrc.readLine(sensorValues);
-  
-  // print the sensor values as numbers from 0 to 1000, where 0 means maximum reflectance and
-  // 1000 means minimum reflectance, followed by the line position
-  for (unsigned char i = 0; i < NUM_SENSORS; i++)
-  {
-    Serial.print(sensorValues[i] * 10 / 1001);
-    Serial.print('\t');
-  }
-  //Serial.println(); // uncomment this line if you are using raw values
-  Serial.println(position); // comment this line out if you are using raw values
-  
-  //delay(250);
-  
-  motorspeed(255, 255);
-  
-  seFueIzq = position > 2750;
-  seFueDer = position < 2250;
-  
-  if (!seFueIzq && !seFueDer) {
-    // Asignamos las velocidades correspondientes a los motores, como estamos
-    // en el caso donde vamos bien los ponemos a toda marcha.
-    veloIzq = 255;
-    veloDer = 255;
-    motorspeed(veloIzq, veloDer);
-    
-    Serial.print("Velocidad izquierda = ");
-    Serial.print(veloIzq);
-    Serial.print("Velocidad derecha = ");
-    Serial.print(veloDer);
-    
-    // Movemos los motores hacia adelante.
-    motorforward(1);
-    motorforward(2);
-  }
-  
-  else if (seFueDer) {
-    while (position < 0) {
-      veloDer = 255;
-      veloIzq = 255;
-      //veloIzq = 0 - (position * 15)/ 250;
-      
-      motorspeed(veloIzq, veloDer);
-      
-      Serial.print("Velocidad izquierda = ");
-      Serial.print(veloIzq);
-      Serial.print("Velocidad derecha = ");
-      Serial.print(veloDer);
-      
-//      if (veloIzq > 40) {
-//        veloIzq = veloIzq - 40;
-//        motorspeed(veloIzq, veloDer);
-//        motorback(1);
-//      }
-//      else if (veloIzq < 40) {
-//        motorforward(1);
-//      }
-      
-      motorstop(1);
-      motorforward(2);
-      
-      position = qtrrc.readLine(sensorValues);
-    }
-  }
-  
-  else if (seFueIzq){
-    while (position < 0) {
-      veloIzq = 255;
-      veloDer = 255;
-      //veloDer = 0 + (position * 15)/ 250;
-      motorspeed(veloIzq, veloDer);
-      
-      Serial.print("Velocidad izquierda = ");
-      Serial.print(veloIzq);
-      Serial.print("Velocidad derecha = ");
-      Serial.print(veloDer);
-
-//      if (veloDer > 40) {
-//        veloDer = veloDer - 40;
-//        motorspeed(veloIzq, veloDer);
-//        motorback(2);
-//      }
-//      else if (veloIzq < 40) {
-//        motorforward(2);
-//      }
-      
-      motorstop(2);
-      motorforward(1);
-      
-      position = qtrrc.readLine(sensorValues);
-    }
-  }
-  
-  Serial.println();
-  
+motorspeed(255, 255);
 //  veloIzq = 255;
 //  veloDer = 255;
 //  
-//  motorforward(1);
-//  motorforward(2);
+  motorforward(1);
+  motorforward(2);
   
   delay(50);
   
